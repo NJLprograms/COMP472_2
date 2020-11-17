@@ -44,7 +44,7 @@ class Puzzle:
     """
     return self.puzzle == Puzzle.GOAL_PUZZLE_MAP or self.puzzle == Puzzle.GOAL_PUZZLE_MAP_ODD
 
-  def get(self, index):
+  def get(self, index: int):
     """ get(index: int): String
 
     Returns the value at the specified index
@@ -53,14 +53,14 @@ class Puzzle:
       if value == index:
         return key
 
-  def getIndexOf(self, item):
+  def getIndexOf(self, item: str):
     """ getIndexOf(item: String): int
 
     Returns the index of the specified item
     """
     return self.puzzle[item]
 
-  def swap(self, item1, item2):
+  def swap(self, item1: str, item2: str):
     """ swap(item1: String, item2: String): void
 
     Swap the values of the two specified keys in the puzzle Dict
@@ -70,7 +70,7 @@ class Puzzle:
     self.puzzle[item2] = temp
     return
 
-  def regularMove(self, move):
+  def regularMove(self, move: Moves.Move):
     """ regularMove(move: Move)
 
     Performs a regular move that is described by the enum value passed in.
@@ -156,6 +156,20 @@ class Puzzle:
 
     self.cost += Cost.WRAP
 
+  def move(self, move: Moves.Move):
+    if move.name == Moves.Move.UP.name or move.name == Moves.Move.DOWN.name or move.name == Moves.Move.LEFT.name or move.name == Moves.Move.RIGHT.name:
+      self.regularMove(move)
+    elif move.name == Moves.Move.WRAP_LEFT.name:
+      self.wrapLeft()
+    elif move.name == Moves.Move.WRAP_RIGHT.name:
+      self.wrapRight()
+    elif move.name == Moves.Move.DIAGONAL.name:
+      self.moveDiagonal()
+    elif move.name == Moves.Move.DIAG_WRAP.name:
+      self.moveDiagonalWrap()
+
+    return self
+
   def getPossibleMoves(self):
     indexOfEmptySlot = self.getIndexOf(Puzzle.EMPTY_SLOT)
     return Moves.moves[indexOfEmptySlot]
@@ -167,4 +181,27 @@ class Puzzle:
     """
     emptySlot = self.getIndexOf(Puzzle.EMPTY_SLOT)
     return emptySlot == Puzzle.BOTTOM_LEFT or emptySlot == Puzzle.BOTTOM_RIGHT or emptySlot == Puzzle.TOP_LEFT or emptySlot == Puzzle.TOP_RIGHT
+
+  def getPuzzleStringForm(self):
+    """ getPuzzleStringForm()
+
+    Returns the string form of the puzzle. For example,
+    _________
+    |0 1 2 3 |
+    |4 5 6 7 |
+    ---------
+    will return "0 1 2 3 4 5 6 7"
+    """
+    sortedPuzzleDictByIndex = {value: index for value, index in sorted(self.getPuzzle().items(), key=lambda item: item[1])}
+    puzzleStringForm = ""
+    for value in sortedPuzzleDictByIndex.keys():
+      puzzleStringForm += (value + " ")
+    
+    return puzzleStringForm.rstrip()
+
+  def __str__(self):
+    return self.getPuzzleStringForm()
+
+  def copy(self):
+    return Puzzle(str(self), self.cost)
 
