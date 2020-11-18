@@ -37,4 +37,6 @@ def GBFS(puzzle: Puzzle):
 
     currentNode = open_list[0]
   
+  print(path)
+
   return str(currentNode)
