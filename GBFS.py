@@ -1,5 +1,6 @@
 from Puzzle import Puzzle
 from heuristic import h1, h2
+import time
 
 def GBFS(puzzle: Puzzle, heuristic=h1):
   """ GBFS(puzzle: Puzzle)
@@ -16,6 +17,10 @@ def GBFS(puzzle: Puzzle, heuristic=h1):
 
   currentNode = puzzle
 
+  solution = open("0_gbfs-"+heuristic.__name__+"_solution.txt", "a")
+  solution.write("0 0 "+str(currentNode)+"\n")
+  start_time = time.time()
+  
   while bool(open_list):
     if len(open_list) == 0:
       raise Exception('Failure: Open list is empty and no solution was found.')
@@ -39,11 +44,14 @@ def GBFS(puzzle: Puzzle, heuristic=h1):
 
     open_list = sorted([*sorted_nodes, *open_list], key=lambda node: h1(node) + node.cost)
     currentNode = open_list[0]
+    solution.write(str(currentNode.tile)+" " +
+                   str(Puzzle.getMoveCost(currentNode))+" "+str(currentNode)+"\n")
 
+  solution.write(str(currentNode.cost)+" "+str(time.time() - start_time))
+  solution.close()
     # # insert the node at each respective height. Previous ones at the same height get replaced if there was backtracking
     # try: 
     #   path[currentNode.height] = currentNode.lastAppliedMove.name
     # except:
     #   path.insert(currentNode.height, currentNode.lastAppliedMove.name)
   
-  return currentNode
