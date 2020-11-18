@@ -1,5 +1,21 @@
 from Puzzle import Puzzle
 
+def indexToCoordinates(index):
+  y = 0
+  x = 0
+
+  if index > 3 and index < 8:
+    y = 1
+    x = index - 4
+  elif index >= 0 and index <=3:
+    y = 0
+    x = index
+  else:
+    raise Exception('number must be between 0-8')
+
+  return {'y': y, 'x': x}
+
+
 def inCorrectRow(item: str, currentIndex: int):
   """
 
@@ -48,4 +64,25 @@ def h1(puzzle: Puzzle):
   return count
 
 def h2(puzzle: Puzzle):
-  print
+  tiles = puzzle.getPuzzle()
+
+  manhattan_distance = 0
+  for tile, index in tiles.items():
+    correctIndex = int(tile) - 1
+
+    if tile == Puzzle.EMPTY_SLOT:
+      correctIndex = 7
+    
+    coordinate1 = indexToCoordinates(correctIndex)
+    coordinate2 = indexToCoordinates(index)
+
+    coordinates = {'y': coordinate1['y'] - coordinate2['y'], 'x': coordinate1['x'] - coordinate2['x']}
+    manhattan_distance += coordinates['y']**2 + coordinates['x']**2
+
+  return manhattan_distance
+
+
+
+    
+
+    

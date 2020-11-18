@@ -1,7 +1,7 @@
 from Puzzle import Puzzle
-from heuristic import h1
+from heuristic import h1, h2
 
-def Astar(puzzle: Puzzle):
+def Astar(puzzle: Puzzle, heuristic=h1):
   """ Astar(puzzle: Puzzle)
 
   Runs an A* algorithm on a Puzzle
@@ -28,7 +28,7 @@ def Astar(puzzle: Puzzle):
     possibleMoves = currentNode.getPossibleMoves() # e.g. [Move.UP, Move.Left, Move.Right]
 
     nodes = [currentNode.copy().move(move) for move in possibleMoves] # list of nodes after applied possible moves
-    sorted_nodes = sorted(nodes, key=lambda node: h1(node) + node.cost) # same list, sorted based on heuristic
+    sorted_nodes = sorted(nodes, key=lambda node: heuristic(node) + node.cost) # same list, sorted based on heuristic
 
     # Increment the height for newly discovered node in the state tree
     for node in nodes:
@@ -40,10 +40,10 @@ def Astar(puzzle: Puzzle):
     open_list = sorted([*sorted_nodes, *open_list], key=lambda node: h1(node) + node.cost)
     currentNode = open_list[0]
 
-    # insert the node at each respective height. Previous ones at the same height get replaced if there was backtracking
-    try: 
-      path[currentNode.height] = currentNode.lastAppliedMove.name
-    except:
-      path.insert(currentNode.height, currentNode.lastAppliedMove.name)
+    # # insert the node at each respective height. Previous ones at the same height get replaced if there was backtracking
+    # try: 
+    #   path[currentNode.height] = currentNode.lastAppliedMove.name
+    # except:
+    #   path.insert(currentNode.height, currentNode.lastAppliedMove.name)
   
   return currentNode

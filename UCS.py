@@ -1,5 +1,6 @@
 import time
 from Puzzle import Puzzle
+from heuristic import h1
 
 def UCS(puzzle: Puzzle):
   """ UCS(puzzle: Puzzle)
@@ -30,6 +31,10 @@ def UCS(puzzle: Puzzle):
 
     nodes = [currentNode.copy().move(move) for move in possibleMoves] # list of nodes after applied possible moves
     sorted_nodes = sorted(nodes, key=lambda node: node.cost) # same list, sorted based on move cost
+    # Increment the height for newly discovered node in the state tree
+    for node in nodes:
+      node.height += 1
+      
     open_list.remove(currentNode)
     closed_list.append(currentNode)
     open_list = sorted([*sorted_nodes, *open_list], key=lambda node: node.cost)
@@ -40,6 +45,13 @@ def UCS(puzzle: Puzzle):
   solution.write(str(currentNode.cost)+" "+str(time.time() - start_time))
   solution.close()
 
+    # # insert the node at each respective height. Previous ones at the same height get replaced if there was backtracking
+    # try: 
+    #   path[currentNode.height] = currentNode.lastAppliedMove.name
+    # except:
+    #   path.insert(currentNode.height, currentNode.lastAppliedMove.name)
+  
+  return currentNode
 
 
 
