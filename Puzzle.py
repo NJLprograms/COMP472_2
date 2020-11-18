@@ -27,9 +27,13 @@ class Puzzle:
       puzzleMap[value] = index
     #
 
+    self.height = 0
+    self.lastAppliedMove = None
     self.puzzle = puzzleMap
     self.cost = cost
     self.lastMove = lastMove
+
+    
     
   def getPuzzle(self):
     """ getPuzzle(): Dict
@@ -158,6 +162,8 @@ class Puzzle:
     self.cost += Cost.WRAP
 
   def move(self, move: Moves.Move):
+    self.lastAppliedMove = move
+    
     if move.name == Moves.Move.UP.name or move.name == Moves.Move.DOWN.name or move.name == Moves.Move.LEFT.name or move.name == Moves.Move.RIGHT.name:
       self.regularMove(move)
       self.lastMove = "regular"
