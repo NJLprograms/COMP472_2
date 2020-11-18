@@ -1,56 +1,53 @@
 
 from Puzzle import Puzzle
+from heuristic import h1
 
 def UCS(puzzle: Puzzle):
-    """ UCS(puzzle: Puzzle)
+  """ UCS(puzzle: Puzzle)
 
   Runs a uniform cost search on a Puzzle
   """
 
-    openList = {}
-    openList[str(puzzle)] = puzzle
+  path = []
 
-    closedList = {}
+  open_list = []
+  open_list.append(puzzle)
 
-    currentNode = puzzle
+  closed_list = []
 
-    while bool(openList):
-        print(str(currentNode))
-        if len(openList) == 0:
-            raise Exception('Failure: Open list is empty and no solution was found.')
-        return
+  currentNode = puzzle
+
+  while bool(open_list):
+    if len(open_list) == 0:
+      raise Exception('Failure: Open list is empty and no solution was found.')
+      return
 
     if currentNode.isGoalState():
       return currentNode
-
-    if str(currentNode) in closedList:
-      raise Exception('No solution found. State ' + str(currentNode) + ' is in the closed list.')
 
     ### Step: Remove node n with the smallest h(n) from open list and place n in closed list
     possibleMoves = currentNode.getPossibleMoves() # e.g. [Move.UP, Move.Left, Move.Right]
 
     nodes = [currentNode.copy().move(move) for move in possibleMoves] # list of nodes after applied possible moves
-    
-    # Remove successor nodes which have already been visited
+    sorted_nodes = sorted(nodes, key=lambda node: node.cost) # same list, sorted based on heuristic
+
+    # Increment the height for newly discovered node in the state tree
     for node in nodes:
-      if str(node) in closedList:
-        nodes.remove(node)
-    # Remove duplicates
+      node.height += 1
 
-    nodes = sorted(nodes, key=lambda node: node.cost) # same list, sorted based on move cost
+    open_list.remove(currentNode)
+    closed_list.append(currentNode)
 
-    for node in nodes:
-      openList[str(node)] = node
+    open_list = sorted([*sorted_nodes, *open_list], key=lambda node: h1(node) + node.cost)
+    currentNode = open_list[0]
 
-    del openList[str(currentNode)]
-    closedList[str(currentNode)] = currentNode
-    ### Step done
-
-    # currentNode points to puzzle deep copy with lowest h(n)
-    currentNode = openList[next(iter(openList))]
+    # # insert the node at each respective height. Previous ones at the same height get replaced if there was backtracking
+    # try: 
+    #   path[currentNode.height] = currentNode.lastAppliedMove.name
+    # except:
+    #   path.insert(currentNode.height, currentNode.lastAppliedMove.name)
   
-    return str(currentNode)
-
+  return currentNode
 
 
 
