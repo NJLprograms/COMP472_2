@@ -11,7 +11,7 @@ class Puzzle:
   EMPTY_SLOT: Final = '0'
   TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT = 0,3,4,7
 
-  def __init__(self, puzzle, cost=0):
+  def __init__(self, puzzle, cost=0, lastMove=None):
     """ The Puzzle class: Puzzle()
     
     This class defines the Puzzle entity. The constructor accepts a input string of the puzzle.
@@ -29,7 +29,8 @@ class Puzzle:
 
     self.puzzle = puzzleMap
     self.cost = cost
-
+    self.lastMove = lastMove
+    
   def getPuzzle(self):
     """ getPuzzle(): Dict
 
@@ -159,14 +160,19 @@ class Puzzle:
   def move(self, move: Moves.Move):
     if move.name == Moves.Move.UP.name or move.name == Moves.Move.DOWN.name or move.name == Moves.Move.LEFT.name or move.name == Moves.Move.RIGHT.name:
       self.regularMove(move)
+      self.lastMove = "regular"
     elif move.name == Moves.Move.WRAP_LEFT.name:
       self.wrapLeft()
+      self.lastMove = "wrapping"
     elif move.name == Moves.Move.WRAP_RIGHT.name:
       self.wrapRight()
+      self.lastMove = "wrapping"
     elif move.name == Moves.Move.DIAGONAL.name:
       self.moveDiagonal()
+      self.lastMove = "diagonal"
     elif move.name == Moves.Move.DIAG_WRAP.name:
       self.moveDiagonalWrap()
+      self.lastMove = "diagonal"
 
     return self
 
@@ -204,4 +210,12 @@ class Puzzle:
 
   def copy(self):
     return Puzzle(str(self), self.cost)
+
+  def getMoves(self):
+    if self.lastMove == "regular":
+      return Cost.REGULAR
+    if self.lastMove == "wrapping":
+      return Cost.WRAP
+    if self.lastMove == "diagonal":
+      return Cost.DIAGONAL
 
