@@ -21,9 +21,6 @@ def UCS(puzzle: Puzzle):
   start_time = time.time()
 
   while bool(open_list):
-    if len(open_list) == 0:
-      raise Exception('Failure: Open list is empty and no solution was found.')
-      return
 
     if(time.time()-start_time > 60):
       solution.write("No solution found")
@@ -31,7 +28,7 @@ def UCS(puzzle: Puzzle):
       return
 
     if currentNode.isGoalState():
-      pass
+      break
 
     ### Step: Remove node n with the smallest h(n) from open list and place n in closed list
     possibleMoves = currentNode.getPossibleMoves() # e.g. [Move.UP, Move.Left, Move.Right]
