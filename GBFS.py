@@ -26,8 +26,13 @@ def GBFS(puzzle: Puzzle, heuristic=h1):
       raise Exception('Failure: Open list is empty and no solution was found.')
       return
 
+    if(time.time()-start_time > 60):
+      solution.write("No solution found")
+      solution.close()
+      return 
+
     if currentNode.isGoalState():
-      return currentNode
+      pass
 
     ### Step: Remove node n with the smallest h(n) from open list and place n in closed list
     possibleMoves = currentNode.getPossibleMoves() # e.g. [Move.UP, Move.Left, Move.Right]
@@ -54,4 +59,5 @@ def GBFS(puzzle: Puzzle, heuristic=h1):
     #   path[currentNode.height] = currentNode.lastAppliedMove.name
     # except:
     #   path.insert(currentNode.height, currentNode.lastAppliedMove.name)
+
   

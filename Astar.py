@@ -17,7 +17,7 @@ def Astar(puzzle: Puzzle, heuristic=h1):
 
   currentNode = puzzle
 
-  solution = open("0_gbfs-"+heuristic.__name__+"_solution.txt", "a")
+  solution = open("0_astar-"+heuristic.__name__+"_solution.txt", "a")
   solution.write("0 0 "+str(currentNode)+"\n")
   start_time = time.time()
   
@@ -26,8 +26,13 @@ def Astar(puzzle: Puzzle, heuristic=h1):
       raise Exception('Failure: Open list is empty and no solution was found.')
       return
 
+    if(time.time()-start_time > 60):
+      solution.write("No solution found")
+      solution.close()
+      return
+
     if currentNode.isGoalState():
-      return currentNode
+      pass
 
     ### Step: Remove node n with the smallest h(n) from open list and place n in closed list
     possibleMoves = currentNode.getPossibleMoves() # e.g. [Move.UP, Move.Left, Move.Right]
