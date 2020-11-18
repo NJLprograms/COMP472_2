@@ -24,7 +24,7 @@ def GBFS(puzzle: Puzzle, heuristic=h1):
   while bool(open_list):
 
     if(time.time()-start_time > 60):
-      solution.write("No solution found")
+      solution.write("No solution found"+"\n")
       solution.close()
       return 
 
@@ -49,7 +49,7 @@ def GBFS(puzzle: Puzzle, heuristic=h1):
     solution.write(str(currentNode.tile)+" " +
                    str(Puzzle.getMoveCost(currentNode))+" "+str(currentNode)+"\n")
 
-  solution.write(str(currentNode.cost)+" "+str(time.time() - start_time))
+  solution.write(str(currentNode.cost)+" "+str(time.time() - start_time)+"\n")
   solution.close()
     # # insert the node at each respective height. Previous ones at the same height get replaced if there was backtracking
     # try: 

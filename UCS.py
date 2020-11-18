@@ -23,7 +23,7 @@ def UCS(puzzle: Puzzle):
   while bool(open_list):
 
     if(time.time()-start_time > 60):
-      solution.write("No solution found")
+      solution.write("No solution found"+"\n")
       solution.close()
       return
 
@@ -53,7 +53,7 @@ def UCS(puzzle: Puzzle):
     # except:
     #   path.insert(currentNode.height, currentNode.lastAppliedMove.name)
 
-  solution.write(str(currentNode.cost)+" "+str(time.time() - start_time))
+  solution.write(str(currentNode.cost)+" "+str(time.time() - start_time)+"\n")
   solution.close()
 
   return currentNode
