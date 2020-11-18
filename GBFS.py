@@ -28,7 +28,7 @@ def GBFS(puzzle: Puzzle):
     possibleMoves = currentNode.getPossibleMoves() # e.g. [Move.UP, Move.Left, Move.Right]
 
     nodes = [currentNode.copy().move(move) for move in possibleMoves] # list of nodes after applied possible moves
-    sorted_nodes = sorted(nodes, key=lambda node: h1(node) + node.cost) # same list, sorted based on heuristic
+    sorted_nodes = sorted(nodes, key=lambda node: h1(node)) # same list, sorted based on heuristic
 
     open_list.remove(currentNode)
     closed_list.append(currentNode)

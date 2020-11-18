@@ -32,6 +32,7 @@ class Puzzle:
     self.puzzle = puzzleMap
     self.cost = cost
     self.lastMove = lastMove
+    self.tile = None
 
     
     
@@ -87,12 +88,16 @@ class Puzzle:
 
     if move.name == Moves.Move.UP.name:
       indexOfItemToMove = emptySlotIndex + Puzzle.VERTICAL_SHIFT
+      self.tile = self.get(indexOfItemToMove)
     elif move.name == Moves.Move.DOWN.name:
       indexOfItemToMove = emptySlotIndex - Puzzle.VERTICAL_SHIFT
+      self.tile = self.get(indexOfItemToMove)
     elif move.name == Moves.Move.LEFT.name:
       indexOfItemToMove = emptySlotIndex + 1
+      self.tile = self.get(indexOfItemToMove)
     elif move.name == Moves.Move.RIGHT.name:
       indexOfItemToMove = emptySlotIndex - 1
+      self.tile = self.get(indexOfItemToMove)
     else:
       raise Exception('Illegal parameter. Must provide a regular move enum.')
       return
@@ -105,12 +110,16 @@ class Puzzle:
     emptySlotIndex = self.getIndexOf(Puzzle.EMPTY_SLOT)
 
     if emptySlotIndex == Puzzle.TOP_LEFT:
+      self.tile = self.get(5)
       self.swap(Puzzle.EMPTY_SLOT, self.get(5))
     elif emptySlotIndex == Puzzle.TOP_RIGHT:
+      self.tile = self.get(6)
       self.swap(Puzzle.EMPTY_SLOT, self.get(6))
     elif emptySlotIndex == Puzzle.BOTTOM_LEFT:
+      self.tile = self.get(1)
       self.swap(Puzzle.EMPTY_SLOT, self.get(1))
     elif emptySlotIndex == Puzzle.BOTTOM_RIGHT:
+      self.tile = self.get(2)
       self.swap(Puzzle.EMPTY_SLOT, self.get(2))
     else:
       raise Exception('Empty slot not @ corner position. Illegal move.')
@@ -122,12 +131,16 @@ class Puzzle:
     emptySlotIndex = self.getIndexOf(Puzzle.EMPTY_SLOT)
 
     if emptySlotIndex == Puzzle.TOP_LEFT:
+      self.tile = self.get(7)
       self.swap(Puzzle.EMPTY_SLOT, self.get(7))
     elif emptySlotIndex == Puzzle.TOP_RIGHT:
+      self.tile = self.get(4)
       self.swap(Puzzle.EMPTY_SLOT, self.get(4))
     elif emptySlotIndex == Puzzle.BOTTOM_LEFT:
+      self.tile = self.get(3)
       self.swap(Puzzle.EMPTY_SLOT, self.get(3))
     elif emptySlotIndex == Puzzle.BOTTOM_RIGHT:
+      self.tile = self.get(0)
       self.swap(Puzzle.EMPTY_SLOT, self.get(0))
     else:
       raise Exception('Empty slot not @ corner position. Illegal move.')
@@ -139,8 +152,10 @@ class Puzzle:
     emptySlotIndex = self.getIndexOf(Puzzle.EMPTY_SLOT)
 
     if emptySlotIndex == Puzzle.TOP_RIGHT:
+      self.tile = self.get(Puzzle.TOP_LEFT)
       self.swap(Puzzle.EMPTY_SLOT, self.get(Puzzle.TOP_LEFT))
     elif emptySlotIndex == Puzzle.BOTTOM_RIGHT:
+      self.tile = self.get(Puzzle.BOTTOM_LEFT)
       self.swap(Puzzle.EMPTY_SLOT, self.get(Puzzle.BOTTOM_LEFT))
     else:
       raise Exception('Cannot wrap left, invalid position.')
@@ -152,8 +167,10 @@ class Puzzle:
     emptySlotIndex = self.getIndexOf(Puzzle.EMPTY_SLOT)
 
     if emptySlotIndex == Puzzle.TOP_LEFT:
+      self.tile = self.get(Puzzle.TOP_RIGHT)
       self.swap(Puzzle.EMPTY_SLOT, self.get(Puzzle.TOP_RIGHT))
     elif emptySlotIndex == Puzzle.BOTTOM_LEFT:
+      self.tile = self.get(Puzzle.BOTTOM_RIGHT)
       self.swap(Puzzle.EMPTY_SLOT, self.get(Puzzle.BOTTOM_RIGHT))
     else:
       raise Exception('Cannot wrap right, invalid position.')
@@ -217,7 +234,7 @@ class Puzzle:
   def copy(self):
     return Puzzle(str(self), self.cost)
 
-  def getMoves(self):
+  def getMoveCost(self):
     if self.lastMove == "regular":
       return Cost.REGULAR
     if self.lastMove == "wrapping":
